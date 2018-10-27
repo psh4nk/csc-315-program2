@@ -14,6 +14,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <iostream>
 
 #define WINDOW_MAX 1000
 #define WINDOW_MIN 0
@@ -180,23 +181,83 @@ void drawArrow( vertex *vp, int points )
       glVertex2f( (vp+i)->x, (vp+i)->y );
       glEnd();*/
     glBegin(GL_LINE_LOOP);
-      glVertex2f(200,400);
+      /*glVertex2f(200,400);
       glVertex2f(200,600);
       glVertex2f(725,550);
-      glVertex2f(725,450);
+      glVertex2f(725,450);*/
 
-      
 
-    for(int i = 0; i < 100; i++)
+    /*for(int i = 0; i < 100; i++)
     {
-        float theta = 2.0f * 3.1415926f * float(i) / float(100);//get the current angle
-
-        float x = 150 * cosf(theta);//calculate the x component
-        float y = 150 * sinf(theta);//calculate the y component
+        //float theta = 2.0f * 3.1415926f * float(i) / float(100);//get the current angle
+        float theta = 2.0f * M_PI * float(i) / float(100);//get the current angle
+        //float x = 150 * cosf(theta);//calculate the x component
+        //float y = 150 * sinf(theta);//calculate the y component
+        
+        float x = 150*cosf(theta);//calculate the x component
+        float y = 150*sinf(theta);//calculate the y component
+        
         if(x+600 > 600){
-            glVertex2f(x + 600, y + 500);//output vertex
+            glVertex2f(x+600, y+500);//output vertex
+            printf("(%f, %f)\n", x+600, y+500);
         }
+    }*/
+    int x,y;
+    float d, radius = 500;
+    
+    
+    /*x = 0; 
+    y = radius;
+    d = 5.0/4.0 - radius;
+    while(y>x){
+        if(d<=0){
+            d+=x*2.0+3;
+            x++;
+        }
+        else{
+            d+=(x-y)*2.0+5;
+            x++;
+            y--;
+        }
+        glVertex2f(x+500, y+150);
     }
+
+
+    x = 0; 
+    y = radius;
+    d = 5.0/4.0 - radius;
+
+    while(y>x){
+        if(d>=0){
+            d+=(x-y)*2.0+3;
+            x++;
+        }
+        else{
+            d+=(x)*2.0+5;
+            x++;
+            y--;
+        }
+        glVertex2f(x+500, y-150);
+    }*/
+
+    x = radius; 
+    y = 0;
+    d = 5.0/4.0 - radius;
+
+    while(y<x){
+        if(d<=0){
+            d+=(x)*2.0+3;
+            y++;
+        }
+        else{
+            d+=(x-y)*2.0+5;
+            y++;
+            x--;
+        }
+        glVertex2f(x+500, y-150);
+    }
+
+
 //glVertex2f(725,450);
 
 
