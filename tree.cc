@@ -1,13 +1,7 @@
-
-/*****************************************
- * Beginning Animation Code #2 - Rotation
- * 
- * Prof A.J. Pounds, Ph.D.
- * Mercer Univeristy
- * Fall 2014
- * 
- */
-
+//Preston Shankle
+//
+//
+//
 
 #include <cmath>
 #include <GL/gl.h>
@@ -15,6 +9,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 #define WINDOW_MAX 1000
 #define WINDOW_MIN 0
@@ -29,6 +24,8 @@ typedef struct vertex {
     float z;
     float w;
 } vertex;
+
+
 
 /* Define these two variables to have a global scope */
 float DELTA_SPIN = 0.0;
@@ -199,7 +196,7 @@ void myinit( void )
 {
     /* attributes */
 
-    glClearColor(0.0, 0.0, 0.0, 1.0); /* black background */
+    glClearColor(0.0, 0.0, 0.0, 0.0); /* black background */
     glPointSize(1.0);
 
     /* set up viewing */
@@ -232,7 +229,7 @@ void display( void )
     glClear(GL_COLOR_BUFFER_BIT);  /*clear the window */
 
     /* Define Viewport */
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.0, 0.0, 0.0);
     glRecti(VIEWPORT_MIN,VIEWPORT_MIN,VIEWPORT_MAX,VIEWPORT_MAX);
 
     /* Define the arrow points */
