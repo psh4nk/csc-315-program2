@@ -15,7 +15,7 @@
 #define WINDOW_MIN 0
 #define VIEWPORT_MAX 900
 #define VIEWPORT_MIN 100
-#define MAX 100
+#define MAX 5000
 
 /* Define the vertex data type */
 typedef struct vertex { 
@@ -24,8 +24,8 @@ typedef struct vertex {
     float z;
     float w;
 } vertex;
-
-
+int count = 0;
+std::vector<vertex> tree;
 
 /* Define these two variables to have a global scope */
 float DELTA_SPIN = 0.0;
@@ -33,13 +33,12 @@ float SPIN  = 0.0;
 
 
 
-void vmatm (int SIZE, float *pA, float *pB)
-
+void vmatm (int SIZE, float *pA, float *pB){
     // Matrix-vector multiplication
     // pA is a pointer to the first element of matrix A
     // pB is a pointer to the first element of vector B
     // On return, B will contain transformed coordinates
-{
+
     int i, j;
     float temp[4];
 
@@ -63,10 +62,14 @@ void buildTranslate( float x, float y, float z, float *pA )
     pA[ 4] = 0.0; pA[ 5] = 1.0; pA[ 6] = 0.0; pA[ 7] =   y;
     pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = 1.0; pA[11] =   z;
     pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
+    /*std::vector<vertex> btranslate;
+      btranslate.push_back({1.0,0.0,0.0,x});
+      btranslate.push_back({0.0,1.0,0.0,y});
+      btranslate.push_back({1.0,0.0,1.0,z});
+      btranslate.push_back({1.0,0.0,0.0,1});*/
 }
 
-void buildRotateZ( float theta, float *pA )
-{
+void buildRotateZ( float theta, float *pA ){
     // Constructs rotation matrix about Z axis
 
     float phi;
@@ -74,6 +77,12 @@ void buildRotateZ( float theta, float *pA )
     // Convert degrees to radians
 
     phi = theta * M_PI / 180.0;
+    /*std::vector<vertex> zrotate;
+      zrotate.push_back({cos(phi),sin(phi),0.0,0.0});
+      zrotate.push_back({-sin(phi),cos(phi),0.0,0.0});
+      zrotate.push_back({0.0,0.0,1.0,0.0}); 
+      zrotate.push_back({0.0,0.0,0.0,1.0});*/
+
 
     pA[ 0] =  cos(phi); pA[ 1] = sin(phi); pA[ 2] = 0.0; pA[ 3] = 0.0;
     pA[ 4] = -sin(phi); pA[ 5] = cos(phi); pA[ 6] = 0.0; pA[ 7] = 0.0;
@@ -84,10 +93,10 @@ void buildRotateZ( float theta, float *pA )
 
 
 
-void applyTransformation( float *vp, int vpts, float *TM ) 
+void applyTransformation( float *vp, int vpts, float *TM ){ 
     // Applies the given transformation matrix TM to the vector vp containing
     // all of the homegenous coordinates to define the object
-{
+
     float temp[4];
     float *tmp;
     int i;
@@ -109,8 +118,7 @@ void applyTransformation( float *vp, int vpts, float *TM )
 }
 
 
-void PipeLine( float *vp, int vpts )
-{
+void PipeLine( float *vp, int vpts ){
     /*  This routine will run the graphics transformation pipeline. 
      *  It is operating on x,y,z homogenous coordinates defined in a linear
      *  array.  These are converted to vertex points later for possible
@@ -133,7 +141,6 @@ void PipeLine( float *vp, int vpts )
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
     applyTransformation( vp, vpts, TM );   	
-
 }
 
 /*
@@ -146,17 +153,44 @@ void PipeLine( float *vp, int vpts )
    apts[16] = 250.0;  apts[17] = 400.0; apts[18] = 0.0; apts[19] = 1.0;
    }*/
 
-void defineArrow( float *apts )
-{
-    apts[ 0] = 500.0;  apts[ 1] = 600.0; apts[ 2] = 0.0; apts[ 3] = 1.0;
-    apts[ 4] = 500.0;  apts[ 5] = 800.0; apts[ 6] = 0.0; apts[ 7] = 1.0;
-    apts[ 8] = 800.0;  apts[ 9] = 650.0; apts[10] = 0.0; apts[11] = 1.0;
-    apts[12] = 500.0;  apts[13] = 600.0; apts[14] = 0.0; apts[15] = 1.0;
-    apts[16] = 500.0;  apts[17] = 800.0; apts[18] = 0.0; apts[19] = 1.0;
+void defineTree( float *apts ){
+
+    /*apts[ 0] = 500.0;  apts[ 1] = 600.0; apts[ 2] = 0.0; apts[ 3] = 1.0;
+      apts[ 4] = 500.0;  apts[ 5] = 800.0; apts[ 6] = 0.0; apts[ 7] = 1.0;
+      apts[ 8] = 800.0;  apts[ 9] = 650.0; apts[10] = 0.0; apts[11] = 1.0;
+      apts[12] = 500.0;  apts[13] = 600.0; apts[14] = 0.0; apts[15] = 1.0;
+      apts[16] = 500.0;  apts[17] = 800.0; apts[18] = 0.0; apts[19] = 1.0;*/
+
+    float r = 200;
+    float x,y;
+    float TPI = 2 * M_PI;
+
+
+    if(count == 0){
+        count++;
+        tree.push_back({200,600,0,1});
+        tree.push_back({725,550,0,1});
+        for (float i = 0.0; i <= TPI / 2; i += 0.001){
+            x = (sin(i)*r)+650;
+            y = (cos(i)*r)+500; 
+            tree.push_back({x,y,0,1});
+        }
+        tree.push_back({725,450,0,1});
+        tree.push_back({200,400,0,1});
+        std::cout << "Tree size: " << tree.size() << std::endl;
+    }
+
+    for(int i = 0; i < tree.size(); i+=4){
+        apts[i] = tree[i].x;
+        apts[i+1] = tree[i].y;
+        apts[i+2] = tree[i].z;
+        apts[i+3] = tree[i].w;
+        std::cout << "curr loc"<< i << std::endl;
+        //std::cout << "tree size"<< tree.size() << std::endl;
+    }
 }
 
-void toVertex ( float *apts, struct vertex *vp, int pts )
-{
+void toVertex ( float *apts, struct vertex *vp, int pts ){
     int i;
 
     for (i=0;i<pts;i++)
@@ -169,31 +203,30 @@ void toVertex ( float *apts, struct vertex *vp, int pts )
 }
 
 
-void drawArrow( vertex *vp, int points )
-{
-    int i;
-
+void drawTree( vertex *vp, int points ){
     /*glBegin(GL_LINE_LOOP);
       for (i=0;i<points;i++)
       glVertex2f( (vp+i)->x, (vp+i)->y );
       glEnd();*/
-    glBegin(GL_LINE_LOOP);
-   
-    float r = 200;
-    float TPI = 2 * M_PI;
 
-    glVertex2f(200,600);
-    glVertex2f(725,550);
-    for (float i = 0.0; i <= TPI / 2; i += 0.001)
-        glVertex2f((sin(i)*r)+650, (cos(i)*r)+500);
-    glVertex2f(725,450);
-    glVertex2f(200,400);
-    glEnd(); 
+    glBegin(GL_LINE_LOOP);
+    for (int i=0;i<points;i++)
+        glVertex2f( (vp+i)->x, (vp+i)->y );
+    glEnd();    
+
+
+}
+
+void fillTree(){
+    //tesselation goes here
+    glBegin(GL_POLYGON);
+    for(int i = 0; i < tree.size(); i++)
+        glVertex2f(tree[i].x, tree[i].y);
+    glEnd();
 }
 
 
-void myinit( void )
-{
+void myinit( void ){
     /* attributes */
 
     glClearColor(0.0, 0.0, 0.0, 0.0); /* black background */
@@ -210,9 +243,7 @@ void myinit( void )
 
 
 
-void display( void )
-{
-
+void display( void ){
     int inPoints;             // The number of points in the arrow 
     float point[MAX];         // Array to hold homogenous coordinates for arrow
     float *apts;              // Pointer for point array 
@@ -229,11 +260,11 @@ void display( void )
     glClear(GL_COLOR_BUFFER_BIT);  /*clear the window */
 
     /* Define Viewport */
-    glColor3f(0.0, 0.0, 0.0);
+    glColor3f(1.0, 1.0, 1.0);
     glRecti(VIEWPORT_MIN,VIEWPORT_MIN,VIEWPORT_MAX,VIEWPORT_MAX);
 
     /* Define the arrow points */
-    defineArrow( apts );
+    defineTree( apts );
 
     /* Now start the process of rotating */
     PipeLine( apts, inPoints );
@@ -242,23 +273,17 @@ void display( void )
     glColor3f(1.0, 0.0, 0.0);
 
     /* Draw Scaled and Rotated Arrow */
-    drawArrow( invp, inPoints );
+    drawTree( invp, inPoints );
     glutSwapBuffers();
-
-
 }
 
-
-void SpinDisplay(void)
-{
+void SpinDisplay(void){
     SPIN = SPIN + DELTA_SPIN;
     if (SPIN > 360.0) SPIN = SPIN - 360.0;
     glutPostRedisplay();
 }
 
-
-void mouse(int button, int state, int x, int y) 
-{
+void mouse(int button, int state, int x, int y) {
     switch (button) {
         case GLUT_LEFT_BUTTON:
             if (state == GLUT_DOWN)
@@ -279,11 +304,7 @@ void mouse(int button, int state, int x, int y)
     }
 }
 
-
-
-
-void keyboard( unsigned char key, int x, int y )
-{ 
+void keyboard( unsigned char key, int x, int y ){ 
     if ( key == 'q' || key == 'Q') exit(0);
     if ( key == 'c' || key == 'C') {
         SPIN = 0.0;
@@ -299,12 +320,13 @@ void keyboard( unsigned char key, int x, int y )
         DELTA_SPIN += 100;
     if(key == '-')
         DELTA_SPIN -= 100;
+    if(key == 'f' || key == 'F')
+        fillTree();
 
 }
 
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
     glutInit(&argc,argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB); 
     glutInitWindowSize(WINDOW_MAX,WINDOW_MAX); 
@@ -316,4 +338,3 @@ int main(int argc, char** argv)
     glutDisplayFunc(display); 
     glutMainLoop();
 }
-
