@@ -15,7 +15,7 @@
 #define WINDOW_MIN 0
 #define VIEWPORT_MAX 900
 #define VIEWPORT_MIN 100
-#define MAX 5000
+#define MAX 500000
 
 /* Define the vertex data type */
 typedef struct vertex { 
@@ -177,16 +177,27 @@ void defineTree( float *apts ){
         }
         tree.push_back({725,450,0,1});
         tree.push_back({200,400,0,1});
+        
+        /*tree.push_back({200,400,0,1});
+        tree.push_back({725,450,0,1});
+        for (float i = 0.0; i <= TPI / 2; i += 0.001){
+            x = (cos(i)*r)+500;
+            y = (sin(i)*r)+650; 
+            tree.push_back({x,y,0,1});
+        }
+        tree.push_back({725,550,0,1});
+        tree.push_back({200,600,0,1});*/
+        
+        
         std::cout << "Tree size: " << tree.size() << std::endl;
     }
-
-    for(int i = 0; i < tree.size(); i+=4){
-        apts[i] = tree[i].x;
-        apts[i+1] = tree[i].y;
-        apts[i+2] = tree[i].z;
-        apts[i+3] = tree[i].w;
-        std::cout << "curr loc"<< i << std::endl;
-        //std::cout << "tree size"<< tree.size() << std::endl;
+    int vertmin = 0;
+    for(int i = 0; i < tree.size(); i++){ 
+        apts[vertmin] = tree[i].x;
+        apts[vertmin+1] = tree[i].y;
+        apts[vertmin+2] = tree[i].z;
+        apts[vertmin+3] = tree[i].w; 
+        vertmin+=4;
     }
 }
 
@@ -255,7 +266,7 @@ void display( void ){
     apts = &point[0];         // the pointer to the array of points 
     invp = &inVertexArray[0]; // the pointer to the array of vertices
 
-    inPoints = 5;             // the actual number of points in the arrow
+    inPoints = tree.size();             // the actual number of points in the arrow
 
     glClear(GL_COLOR_BUFFER_BIT);  /*clear the window */
 
