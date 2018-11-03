@@ -1,10 +1,10 @@
 #include "globals.c"
 
-void buildReflectXY(float x, float y, float z, float *pA){
+void buildReflectX(float x, float y, float z, float *pA){
     //defines the xy-axis reflection matrix
-    pA[ 0] = -1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x;
-    pA[ 4] = 0.0; pA[ 5] = -1.0; pA[ 6] = 0.0; pA[ 7] =   y;
-    pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = -1.0; pA[11] =   z;
+    pA[ 0] = -1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x+movex;
+    pA[ 4] = 0.0; pA[ 5] = -1.0; pA[ 6] = 0.0; pA[ 7] =   y+movey;
+    pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = -1.0; pA[11] =   z+movez;
     pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
 }
 

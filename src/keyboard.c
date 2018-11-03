@@ -1,6 +1,6 @@
-#include "move.c"
+#include "clip.c"
 
-void keyboard( unsigned char key, int x, int y ){
+void keyboard( unsigned char key, int x, int y ){ 
     if ( key == 'q' || key == 'Q') exit(0);
     if ( key == 'c' || key == 'C') {
         SPIN = 0.0;
@@ -21,5 +21,11 @@ void keyboard( unsigned char key, int x, int y ){
         DELTA_SPIN -= 100;
     if(key == 'f' || key == 'F')
         fillTree();
+    if(key == 's' || key == 'S') 
+        stopAnimation();
+    if(key == 'i' || key == 'I')
+        stopAndReset();
+    if(key == 't' || key == 'T')
+        tessellate();
 }
 

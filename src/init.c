@@ -1,7 +1,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include "constants.h"
+//#include "constants.h"
+
 void myinit( void ){
     /* attributes */
 

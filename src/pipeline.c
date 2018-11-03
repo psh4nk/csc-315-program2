@@ -1,4 +1,5 @@
 #include "transform.c"
+#include "includes.h"
 
 void PipeLine( float *vp, int vpts ){
     /*  This routine will run the graphics transformation pipeline. 
@@ -18,19 +19,23 @@ void PipeLine( float *vp, int vpts ){
     buildTranslate( -WINDOW_MAX/2, -WINDOW_MAX/2, 0.0,  TM );
     applyTransformation( vp, vpts, TM );
 
+   
+    
     // Perform the rotation operation
     buildRotateZ( SPIN, TM );
     applyTransformation( vp, vpts, TM );
 
     // XY-axis reflection
     if(reflectflag == 1){
-        buildReflectXY(0,0,0.0,TM);
-        applyTransformation(vp,vpts,TM);
+        buildReflectX(0.0,0.0,0.0,TM);
+        applyTransformation(vp,vpts,TM); 
     }
+   
 
     //Scale
     buildScale(0,0, 0.0, TM);
     applyTransformation(vp,vpts,TM);
+
 
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );

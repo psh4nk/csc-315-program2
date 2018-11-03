@@ -1,10 +1,4 @@
-#include <cmath>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#include <math.h>
-#include <iostream>
-#include <vector>
+#include "includes.h"
 
 typedef struct vertex {
     float x;
@@ -13,8 +7,19 @@ typedef struct vertex {
     float w;
 } vertex;
 
+typedef struct{
+    // struct to hold triangle data
+    double a[2], b[2], c[2];
+} triangle;
+
+typedef struct{
+    // struct to hold vertices
+    int x, y;
+} coords;
+
 int count = 0;
 std::vector<vertex> tree;
+std::vector<triangle> triangles;
 
 /* Define these two variables to have a global scope */
 float DELTA_SPIN = 0.0;
