@@ -30,7 +30,7 @@ std::vector<vertex> tree;
 /* Define these two variables to have a global scope */
 float DELTA_SPIN = 0.0;
 float SPIN  = 0.0;
-
+float scalex = 1.0, scaley = 1.0, scalez = 1.0;
 
 
 void vmatm (int SIZE, float *pA, float *pB){
@@ -54,6 +54,22 @@ void vmatm (int SIZE, float *pA, float *pB){
 
 }
 
+void buildScale(float x, float y, float z, float *pA){
+    // Constructs scaling matrix to scale along x, y, and z axes
+
+    if(scalex >= 0){
+        pA[ 0] = scalex; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   0;
+        pA[ 4] = 0.0; pA[ 5] = scaley; pA[ 6] = 0.0; pA[ 7] =   0;
+        pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = scalez; pA[11] =   0;
+        pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
+    }
+    else{
+        pA[ 0] = 0.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   0;
+        pA[ 4] = 0.0; pA[ 5] = 0.0; pA[ 6] = 0.0; pA[ 7] =   0;
+        pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = 0.0; pA[11] =   0;
+        pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
+    }
+}
 
 void buildTranslate( float x, float y, float z, float *pA )
     // Constructs tranlation matrix to translate along x, y, and z axes
@@ -61,12 +77,7 @@ void buildTranslate( float x, float y, float z, float *pA )
     pA[ 0] = 1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x;
     pA[ 4] = 0.0; pA[ 5] = 1.0; pA[ 6] = 0.0; pA[ 7] =   y;
     pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = 1.0; pA[11] =   z;
-    pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
-    /*std::vector<vertex> btranslate;
-      btranslate.push_back({1.0,0.0,0.0,x});
-      btranslate.push_back({0.0,1.0,0.0,y});
-      btranslate.push_back({1.0,0.0,1.0,z});
-      btranslate.push_back({1.0,0.0,0.0,1});*/
+    pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0; 
 }
 
 void buildRotateZ( float theta, float *pA ){
@@ -76,14 +87,7 @@ void buildRotateZ( float theta, float *pA ){
 
     // Convert degrees to radians
 
-    phi = theta * M_PI / 180.0;
-    /*std::vector<vertex> zrotate;
-      zrotate.push_back({cos(phi),sin(phi),0.0,0.0});
-      zrotate.push_back({-sin(phi),cos(phi),0.0,0.0});
-      zrotate.push_back({0.0,0.0,1.0,0.0}); 
-      zrotate.push_back({0.0,0.0,0.0,1.0});*/
-
-
+    phi = theta * M_PI / 180.0; 
     pA[ 0] =  cos(phi); pA[ 1] = sin(phi); pA[ 2] = 0.0; pA[ 3] = 0.0;
     pA[ 4] = -sin(phi); pA[ 5] = cos(phi); pA[ 6] = 0.0; pA[ 7] = 0.0;
     pA[ 8] = 0.0;       pA[ 9] = 0.0;      pA[10] = 1.0; pA[11] = 0.0;
@@ -132,39 +136,40 @@ void PipeLine( float *vp, int vpts ){
     /* Don't forget to initialize the ponter! */
     TM = &TransformationMatrix[0];
 
-    // Translate to origin  
+    //translate to origin
     buildTranslate( -WINDOW_MAX/2, -WINDOW_MAX/2, 0.0,  TM );
-    applyTransformation( vp, vpts, TM );   	
+    applyTransformation( vp, vpts, TM );
+
     // Perform the rotation operation
     buildRotateZ( SPIN, TM );	
     applyTransformation( vp, vpts, TM );
+
+
+    //Scale
+    buildScale(0,0, 0.0, TM);
+    applyTransformation(vp,vpts,TM);
+    //translate back    
+
+    //buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
+    //applyTransformation( vp, vpts, TM );
+
+
+    // Translate to origin  
+    //buildTranslate( -WINDOW_MAX/2, -WINDOW_MAX/2, 0.0,  TM );
+    //applyTransformation( vp, vpts, TM );   	
+    // Perform the rotation operation
+    //buildRotateZ( SPIN, TM );	
+    //applyTransformation( vp, vpts, TM );
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
-    applyTransformation( vp, vpts, TM );   	
+    applyTransformation( vp, vpts, TM );   	   
 }
 
-/*
-   void defineArrow( float *apts )
-   {
-   apts[ 0] = 250.0;  apts[ 1] = 300.0; apts[ 2] = 0.0; apts[ 3] = 1.0;
-   apts[ 4] = 250.0;  apts[ 5] = 400.0; apts[ 6] = 0.0; apts[ 7] = 1.0;
-   apts[ 8] = 800.0;  apts[ 9] = 350.0; apts[10] = 0.0; apts[11] = 1.0;
-   apts[12] = 250.0;  apts[13] = 300.0; apts[14] = 0.0; apts[15] = 1.0;
-   apts[16] = 250.0;  apts[17] = 400.0; apts[18] = 0.0; apts[19] = 1.0;
-   }*/
-
 void defineTree( float *apts ){
-
-    /*apts[ 0] = 500.0;  apts[ 1] = 600.0; apts[ 2] = 0.0; apts[ 3] = 1.0;
-      apts[ 4] = 500.0;  apts[ 5] = 800.0; apts[ 6] = 0.0; apts[ 7] = 1.0;
-      apts[ 8] = 800.0;  apts[ 9] = 650.0; apts[10] = 0.0; apts[11] = 1.0;
-      apts[12] = 500.0;  apts[13] = 600.0; apts[14] = 0.0; apts[15] = 1.0;
-      apts[16] = 500.0;  apts[17] = 800.0; apts[18] = 0.0; apts[19] = 1.0;*/
 
     float r = 200;
     float x,y;
     float TPI = 2 * M_PI;
-
 
     if(count == 0){
         count++;
@@ -176,21 +181,9 @@ void defineTree( float *apts ){
             tree.push_back({x,y,0,1});
         }
         tree.push_back({725,450,0,1});
-        tree.push_back({200,400,0,1});
-        
-        /*tree.push_back({200,400,0,1});
-        tree.push_back({725,450,0,1});
-        for (float i = 0.0; i <= TPI / 2; i += 0.001){
-            x = (cos(i)*r)+500;
-            y = (sin(i)*r)+650; 
-            tree.push_back({x,y,0,1});
-        }
-        tree.push_back({725,550,0,1});
-        tree.push_back({200,600,0,1});*/
-        
-        
-        std::cout << "Tree size: " << tree.size() << std::endl;
+        tree.push_back({200,400,0,1});    
     }
+
     int vertmin = 0;
     for(int i = 0; i < tree.size(); i++){ 
         apts[vertmin] = tree[i].x;
@@ -215,17 +208,10 @@ void toVertex ( float *apts, struct vertex *vp, int pts ){
 
 
 void drawTree( vertex *vp, int points ){
-    /*glBegin(GL_LINE_LOOP);
-      for (i=0;i<points;i++)
-      glVertex2f( (vp+i)->x, (vp+i)->y );
-      glEnd();*/
-
     glBegin(GL_LINE_LOOP);
     for (int i=0;i<points;i++)
         glVertex2f( (vp+i)->x, (vp+i)->y );
     glEnd();    
-
-
 }
 
 void fillTree(){
@@ -276,7 +262,7 @@ void display( void ){
 
     /* Define the arrow points */
     defineTree( apts );
-
+    glutPostRedisplay();
     /* Now start the process of rotating */
     PipeLine( apts, inPoints );
     toVertex( apts, invp, inPoints );
@@ -295,19 +281,32 @@ void SpinDisplay(void){
 }
 
 void mouse(int button, int state, int x, int y) {
+    //std::cout << "x: " << x << ", y: " << y << "\n"; 
     switch (button) {
         case GLUT_LEFT_BUTTON:
-            if (state == GLUT_DOWN)
-            {
+            if (state == GLUT_DOWN && x < VIEWPORT_MAX && x > VIEWPORT_MIN && y < VIEWPORT_MAX && y > VIEWPORT_MIN){
                 DELTA_SPIN = DELTA_SPIN - 1.0;
                 glutIdleFunc(SpinDisplay);
             }
+            else if(x > VIEWPORT_MAX || x < VIEWPORT_MIN || y > VIEWPORT_MAX || y < VIEWPORT_MIN){
+                scalex += .05;
+                scaley += .05;
+                scalez += .05;
+                //std::cout<<"LC: mouse outside window!\n";
+                //increase scale
+            }
             break;
         case GLUT_RIGHT_BUTTON:
-            if (state == GLUT_DOWN)
-            {
+            if (state == GLUT_DOWN && x < VIEWPORT_MAX && x > VIEWPORT_MIN && y < VIEWPORT_MAX && y > VIEWPORT_MIN){
                 DELTA_SPIN = DELTA_SPIN + 1.0;
                 glutIdleFunc(SpinDisplay);
+            }
+            else if(x > VIEWPORT_MAX || x < VIEWPORT_MIN || y > VIEWPORT_MAX || y < VIEWPORT_MIN){
+                scalex -= .05;
+                scaley -= .05;
+                scalez -= .05;
+                //std::cout << "RC: mouse outside window!\n";
+                //decrease scale
             }
             break;
         default:
