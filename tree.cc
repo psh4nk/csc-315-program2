@@ -30,8 +30,15 @@ std::vector<vertex> tree;
 /* Define these two variables to have a global scope */
 float DELTA_SPIN = 0.0;
 float SPIN  = 0.0;
+
+// scaling variables
 float scalex = 1.0, scaley = 1.0, scalez = 1.0;
 
+// moving variables (arrow keys)
+float movex = 0.0, movey = 0.0, movez = 0.0; 
+
+//flag to handle reflection
+int reflectflag = 0; 
 
 void vmatm (int SIZE, float *pA, float *pB){
     // Matrix-vector multiplication
@@ -54,6 +61,14 @@ void vmatm (int SIZE, float *pA, float *pB){
 
 }
 
+void buildReflectXY(float x, float y, float z, float *pA){
+    //defines the xy-axis reflection matrix
+    pA[ 0] = -1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x;
+    pA[ 4] = 0.0; pA[ 5] = -1.0; pA[ 6] = 0.0; pA[ 7] =   y;
+    pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = -1.0; pA[11] =   z;
+    pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0;
+}
+
 void buildScale(float x, float y, float z, float *pA){
     // Constructs scaling matrix to scale along x, y, and z axes
 
@@ -71,12 +86,12 @@ void buildScale(float x, float y, float z, float *pA){
     }
 }
 
-void buildTranslate( float x, float y, float z, float *pA )
+void buildTranslate( float x, float y, float z, float *pA ){
     // Constructs tranlation matrix to translate along x, y, and z axes
-{
-    pA[ 0] = 1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x;
-    pA[ 4] = 0.0; pA[ 5] = 1.0; pA[ 6] = 0.0; pA[ 7] =   y;
-    pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = 1.0; pA[11] =   z;
+
+    pA[ 0] = 1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x+movex;
+    pA[ 4] = 0.0; pA[ 5] = 1.0; pA[ 6] = 0.0; pA[ 7] =   y+movey;
+    pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = 1.0; pA[11] =   z+movez;
     pA[12] = 0.0; pA[13] = 0.0; pA[14] = 0.0; pA[15] = 1.0; 
 }
 
@@ -144,22 +159,18 @@ void PipeLine( float *vp, int vpts ){
     buildRotateZ( SPIN, TM );	
     applyTransformation( vp, vpts, TM );
 
+    // XY-axis reflection
+    if(reflectflag == 1){
+        buildReflectXY(0,0,0.0,TM);
+        applyTransformation(vp,vpts,TM);       
+
+        std::cout << "movex: " << movex << ", movey: " << movey << ", movez: " << movez << std::endl;
+    }
 
     //Scale
     buildScale(0,0, 0.0, TM);
     applyTransformation(vp,vpts,TM);
-    //translate back    
 
-    //buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
-    //applyTransformation( vp, vpts, TM );
-
-
-    // Translate to origin  
-    //buildTranslate( -WINDOW_MAX/2, -WINDOW_MAX/2, 0.0,  TM );
-    //applyTransformation( vp, vpts, TM );   	
-    // Perform the rotation operation
-    //buildRotateZ( SPIN, TM );	
-    //applyTransformation( vp, vpts, TM );
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
     applyTransformation( vp, vpts, TM );   	   
@@ -280,6 +291,22 @@ void SpinDisplay(void){
     glutPostRedisplay();
 }
 
+void moveup(){
+    movey += 5;
+}
+
+void movedown(){
+    movey -= 5;
+}
+
+void moveleft(){
+    movex -= 5;
+}
+
+void moveright(){
+    movex += 5;
+}
+
 void mouse(int button, int state, int x, int y) {
     //std::cout << "x: " << x << ", y: " << y << "\n"; 
     switch (button) {
@@ -324,17 +351,38 @@ void keyboard( unsigned char key, int x, int y ){
         glutIdleFunc(NULL);
     }
     if(key == 'r' || key == 'R'){
-        DELTA_SPIN = 0;
-    }
+        if(reflectflag == 0)
+            reflectflag = 1;
+        else
+            reflectflag = 0;
+    } 
     if(key == '+')
         DELTA_SPIN += 100;
     if(key == '-')
         DELTA_SPIN -= 100;
     if(key == 'f' || key == 'F')
-        fillTree();
-
+        fillTree(); 
 }
 
+void SpecialInput(int key, int x, int y)
+{
+    switch(key){
+        case GLUT_KEY_UP:
+            moveup();
+            break;	
+        case GLUT_KEY_DOWN:
+            movedown();
+            break;
+        case GLUT_KEY_LEFT:
+            moveleft();
+            break;
+        case GLUT_KEY_RIGHT:
+            moveright();
+            break;
+        default:
+            break;
+    }
+}
 
 int main(int argc, char** argv){
     glutInit(&argc,argv);
@@ -345,6 +393,7 @@ int main(int argc, char** argv){
     myinit(); 
     glutMouseFunc(mouse);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(SpecialInput);
     glutDisplayFunc(display); 
     glutMainLoop();
 }
