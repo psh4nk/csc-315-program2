@@ -1,7 +1,8 @@
-//Preston Shankle
-//
-//
-//
+// Preston Shankle
+// main.cc
+// November 6, 2018
+
+
 
 #include "init.c"
 #include "keyboard.c"
