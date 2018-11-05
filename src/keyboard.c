@@ -25,8 +25,8 @@ void keyboard( unsigned char key, int x, int y ){
         stopAnimation();
     if(key == 'i' || key == 'I')
         stopAndReset();
-    if(key == 't' || key == 'T'){ 
-        tessellate();
-    }
+    //if(key == 't' || key == 'T'){ 
+        //tessellate();
+    //}
 }
 

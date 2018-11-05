@@ -7,6 +7,15 @@ typedef struct vertex {
     float w;
 } vertex;
 
+class wcPt2D {
+    public:
+        float x, y;
+};
+
+typedef enum { Left, Right, Bottom, Top } Boundary;
+
+const GLint nClip = 4;
+
 typedef struct {
     unsigned all;
     unsigned left:4;
@@ -21,8 +30,8 @@ typedef struct{
 } triangle;
 
 /*typedef struct{
-    // struct to hold vertices
-    int x, y;
+// struct to hold vertices
+int x, y;
 } coords;
 */
 int count = 0;
