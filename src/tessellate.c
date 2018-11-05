@@ -6,8 +6,8 @@
 void tessellate(){
     // Draws the triangles from the triangle vector on the screen
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f );
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f );
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBegin(GL_LINE_LOOP);  
     for(int i = 0; i < triangles.size(); i++){
         glVertex2f(triangles[i].a[0], triangles[i].a[1]);
@@ -19,7 +19,7 @@ void tessellate(){
     }    
 
     glEnd();
-    glFlush();
+    //glFlush();
 
 
 }

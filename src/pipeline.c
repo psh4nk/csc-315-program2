@@ -1,4 +1,4 @@
-#include "transform.c"
+#include "clip.c"
 #include "includes.h"
 
 void PipeLine( float *vp, int vpts ){
@@ -30,7 +30,7 @@ void PipeLine( float *vp, int vpts ){
         buildReflectX(0.0,0.0,0.0,TM);
         applyTransformation(vp,vpts,TM); 
     }
-   
+  
 
     //Scale
     buildScale(0,0, 0.0, TM);
@@ -40,5 +40,7 @@ void PipeLine( float *vp, int vpts ){
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
     applyTransformation( vp, vpts, TM );
+
+    //checkintersection(vp, vpts);
 }
 

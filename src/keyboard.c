@@ -1,4 +1,4 @@
-#include "clip.c"
+#include "move.c"
 
 void keyboard( unsigned char key, int x, int y ){ 
     if ( key == 'q' || key == 'Q') exit(0);
@@ -25,7 +25,8 @@ void keyboard( unsigned char key, int x, int y ){
         stopAnimation();
     if(key == 'i' || key == 'I')
         stopAndReset();
-    if(key == 't' || key == 'T')
+    if(key == 't' || key == 'T'){ 
         tessellate();
+    }
 }
 

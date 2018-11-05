@@ -1,3 +1,6 @@
+# Makefile built using template from: https://github.com/LaurentTreguier/Makefile
+
+
 #===== User defined variables =====#
 
 DIR_SRC:=src/
@@ -9,7 +12,7 @@ DIR_OBJ:=obj/
 
 CC:=g++
 EXT:=cc
-TARGET:=prog.exe
+TARGET:=main.exe
 # The target executable file.
 
 CFLAGS=$(COMMONFLAGS) -std=c11
@@ -20,8 +23,6 @@ LDLIBS =  -lglut -lGL -lGLU -lX11 -lm
 
 
 # Flags added to the compilation.
-COMMONLIBS:=
-WIN32LIBS:=$(COMMONLIBS)
 LINUXLIBS:=$(COMMONLIBS)
 # Libraries needed to link the TARGET executable, for windows and for linux.
 
@@ -54,32 +55,6 @@ VPATH:=$(DIR_SRC_ALL) $(DIR_OBJ)
 # This is the variable Make uses to know where the targets and prerequisites are.
 
 COMMONFLAGS+=$(I_SRC) $(I_INC) -MMD
-# The flags the compiler needs to know where the source and header files are (I_SRC and I_INC).
-# It compiles source files with the -MMD option that creates dependency files.
-
-ifeq ($(OS),Windows_NT)
-	LIBS:=$(WIN32LIBS)
-	AND:=&
-	CLEAR:=cls
-	MOVE:=cmd /c move
-	CLEAN:=cmd /c del /q
-	OBJ_DEP:=$(DIR_OBJ:%/=%)
-else
-	LIBS:=$(LINUXLIBS)
-	AND:=;
-	CLEAR:=clear
-	MOVE:=mv
-	CLEAN:=rm
-	OBJ_DEP:=$(DIR_OBJ)*
-endif
-# All these variables contain OS dependent information :
-# LIBS is the list of linking flags.
-# AND is the character that allows two commands to be written on one line.
-# CLEAR is the command that clears the console.
-# MOVE is the command used to move files from a directory to another.
-# CLEAN is the command used to delete files.
-# OBJ_DEP is what needs to be deleted during cleaning operations : object and dependency files.
-
 #===== Rules =====#
 
 .PHONY:all init clear %-depend clean
@@ -88,23 +63,4 @@ $(TARGET):$(OBJ)
 	-@$(MOVE) *.o $(DIR_OBJ)
 	-@$(MOVE) *.d $(DIR_OBJ)
 	$(CC) $(addprefix $(DIR_OBJ),$(OBJ)) $(LIBS) -o $(TARGET)
-# The main rule of the makefile : the compilation of TARGET.
-# The new object and dependency files are moved in the object directory.
 
-init:
-	-@mkdir $(DIR_SRC) $(DIR_INC) $(DIR_OBJ)
-	@echo Project created in the current directory
-
-%-depend:
-	-@cd obj $(AND) $(CLEAN) $(*F).o $(AND) $(CLEAN) $(*F).d
-	@echo $(*F).$(EXT) dependencies will be rebuilt with next compilation.
-# Deletes dependency file so it is rebuilt with next compilation.
-# This rule is made to be manually called if a source file was moved from one directory to another.
-
-clean:
-	-@$(CLEAN) $(OBJ_DEP) $(TARGET)
-	@echo Object directory purged and $(TARGET) deleted !
-# Purges the object files directory from object and dependency files, and deletes TARGET.
-
--include $(DIR_OBJ)*.d
-# Inclusion of all dependency files, which contains all the dependency information for creating object files.
