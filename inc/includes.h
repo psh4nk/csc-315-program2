@@ -5,3 +5,5 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <stdio.h>
+#include <stdbool.h>

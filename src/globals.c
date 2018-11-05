@@ -7,16 +7,24 @@ typedef struct vertex {
     float w;
 } vertex;
 
+typedef struct {
+    unsigned all;
+    unsigned left:4;
+    unsigned right:4;
+    unsigned bottom:4;
+    unsigned top:4;
+} outcode;
+
 typedef struct{
     // struct to hold triangle data
     double a[2], b[2], c[2];
 } triangle;
 
-typedef struct{
+/*typedef struct{
     // struct to hold vertices
     int x, y;
 } coords;
-
+*/
 int count = 0;
 std::vector<vertex> tree;
 std::vector<triangle> triangles;

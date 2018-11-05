@@ -36,6 +36,8 @@ void PipeLine( float *vp, int vpts ){
     buildScale(0,0, 0.0, TM);
     applyTransformation(vp,vpts,TM);
 
+    //CHClip(vp, vpts, 100,900,100,900,1);
+
 
     // Translate back to point
     buildTranslate( WINDOW_MAX/2, WINDOW_MAX/2, 0.0,  TM );
