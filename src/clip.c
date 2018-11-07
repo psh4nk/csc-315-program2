@@ -41,8 +41,7 @@ void Output(vertex newVertex, int *outLength, vertex *outVertexArray){
 }
 
 void SutherlandHodgmanPolygonClip(vertex *inVertexArray,
-        vertex *outVertexArray, int inLength, int *outLength, vertex *clip_boundary)
-{
+        vertex *outVertexArray, int inLength, int *outLength, vertex *clip_boundary){
     vertex s, p, i;
     int j;
 
