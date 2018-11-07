@@ -44,17 +44,21 @@ void toVertex ( float *apts, struct vertex *vp, int pts ){
 
 
 void drawTree( vertex *vp, int points ){
-    vertex *boundary;
-    boundary[0] = {100,100,0,1};
-    boundary[1] = {100,900,0,1};
-    boundary[2] = {900,900,0,1};
-    boundary[3] = {900,100,0,1}; 
-    vertex *temp;
-    SutherlandHodgmanPolygonClip(vp,temp,points,boundary);
-    
+    vertex bounds[4];
+    vertex *temp = &bounds[0];
+    bounds[0] = {100,100,0,1};
+    bounds[1] = {100,900,0,1};
+    bounds[2] = {900,900,0,1};
+    bounds[3] = {900,100,0,1}; 
+    vertex outVertexArray[points];
+    vertex *point = &outVertexArray[0];
+    int *outLength; 
+    *outLength = points*2;
+    SutherlandHodgmanPolygonClip(vp,outVertexArray,points,outLength,bounds);
+     
     glBegin(GL_LINE_LOOP);
     for (int i=0;i<points;i++)
-        glVertex2f( (temp+i)->x, (temp+i)->y );
+        glVertex2f( (outVertexArray+i)->x, (outVertexArray+i)->y );
     glEnd();
 }
 
