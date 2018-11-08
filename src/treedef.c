@@ -44,7 +44,7 @@ void toVertex ( float *apts, struct vertex *vp, int pts ){
 
 
 void drawTree( vertex *vp, int points ){
-    vertex bounds[4];
+    /*vertex bounds[4];
     vertex *temp = &bounds[0];
     bounds[0] = {100,100,0,1};
     bounds[1] = {100,900,0,1};
@@ -55,10 +55,10 @@ void drawTree( vertex *vp, int points ){
     int *outLength; 
     *outLength = points*2;
     SutherlandHodgmanPolygonClip(vp,outVertexArray,points,outLength,bounds);
-     
+     */
     glBegin(GL_LINE_LOOP);
     for (int i=0;i<points;i++)
-        glVertex2f( (outVertexArray+i)->x, (outVertexArray+i)->y );
+        glVertex2f( (vp+i)->x, (vp+i)->y );
     glEnd();
 }
 
