@@ -44,20 +44,34 @@ void toVertex ( float *apts, struct vertex *vp, int pts ){
 
 
 void drawTree( vertex *vp, int points ){
-    vertex bounds[4];
-    //vertex *loc;
-    //loc = &bounds[0];
-    bounds[0] = {100,100,0,1};
-    bounds[1] = {100,900,0,1};
-    bounds[2] = {900,900,0,1};
-    bounds[3] = {900,100,0,1};
+    
+    // define window boundaries
+    vertex left[2],top[2],right[2],bottom[2];
+    
+    left[0] = {100,900,0,1};
+    left[1] = {100,100,0,1};
+    top[0] = {900,900,0,1};
+    top[1] = {100,900,0,1};
+    right[0] = {900,100,0,1};
+    right[1] = {900,900,0,1};
+    bottom[0] = {100,100,0,1};
+    bottom[1] = {900,100,0,1};
 
-    vertex *temp = vp;
-    SutherlandHodgmanPolygonClip(vp,temp,points,points,bounds);
+
+
+    int i;
+    int* outLength;
+    outLength = &i;
+    vertex *temp=vp;
+    SutherlandHodgmanPolygonClip(vp,temp,points,outLength,left);
+    SutherlandHodgmanPolygonClip(vp,temp,points,outLength,top);
+    SutherlandHodgmanPolygonClip(vp,temp,points,outLength,right);
+    SutherlandHodgmanPolygonClip(vp,temp,points,outLength,bottom);
     
     glBegin(GL_LINE_LOOP);
-    for (int i=0;i<points;i++)
-        glVertex2f( (temp+i)->x, (temp+i)->y );
+    for (int i=0;i<*outLength;i++){
+        glVertex2f( (temp+i)->x, (temp+i)->y ); 
+    }
     glEnd();
 }
 
