@@ -10,8 +10,9 @@ DIR_OBJ:=obj/
 # The object files directory also serves for dependency files.
 # All directories must end with a slash ("/") or else the makefile won't work !
 
+SRC=main.cc
 CC:=g++
-EXT:=cc
+EXT:=c cc cpp 
 TARGET:=main.exe
 # The target executable file.
 
@@ -60,7 +61,5 @@ COMMONFLAGS+=$(I_SRC) $(I_INC) -MMD
 .PHONY:all init clear %-depend clean
 
 $(TARGET):$(OBJ)
-	-@$(MOVE) *.o $(DIR_OBJ)
-	-@$(MOVE) *.d $(DIR_OBJ)
-	$(CC) $(addprefix $(DIR_OBJ),$(OBJ)) $(LIBS) -o $(TARGET)
+	$(CC) -Isrc/ -Iinc/ -MMD -std=c++11    main.cc  -lglut -lGL -lGLU -lX11 -lm -o main.exe
 

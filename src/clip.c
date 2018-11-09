@@ -44,7 +44,7 @@ void SutherlandHodgmanPolygonClip(vertex *inVertexArray,
     vertex s, p, i;
     int j;
 
-    //*outLength = 0;
+    *outLength = 0;
     s = inVertexArray[inLength - 1];    /* Start with the last vertex in inVertexArray */
     for (j = 0; j < inLength; j++) {
         p = inVertexArray[j];   /* Now s and p correspond to the vertices in Fig.3.33 */
