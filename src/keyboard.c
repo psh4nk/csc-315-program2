@@ -16,9 +16,9 @@ void keyboard( unsigned char key, int x, int y ){
             reflectflag = 0;
     }
     if(key == '+')
-        DELTA_SPIN += 100;
-    if(key == '-')
         DELTA_SPIN -= 100;
+    if(key == '-')
+        DELTA_SPIN += 100;
     if(key == 'f' || key == 'F')
         fillTree();
     if(key == 's' || key == 'S') 

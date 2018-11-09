@@ -1,0 +1,134 @@
+#include "pipeline.c"
+#include "includes.h"
+
+void defineTree( float *apts ){
+
+    float r = 200;
+    float x,y;
+    float TPI = 2 * M_PI;
+    float x0 = 650;
+    float y0 = 500;
+
+    if(count == 0){
+        count++;
+        tree.push_back({200,600,0,1});
+        tree.push_back({725,550,0,1});
+        
+        float d;
+        x = 0.0;
+        y = r;
+        d = 5.0/4.0-r;
+        while(y>x){
+            if(d<0){
+                d+=(x)*2.0+3;
+                x++;
+            } 
+            else{
+                d+=(x-y)*2.0+5;
+                x++;
+                y--;
+            }
+            
+            
+            tree.push_back({x0+x,y0+y,0,1});
+            //tree.push_back({x0+y,y0+x,0,1});       
+            //tree.push_back({x0+y,y0-x,0,1});
+            //tree.push_back({x0+x,y0-y,0,1});
+            
+           
+        }
+        
+        /*for (float i = 0.0; i <= TPI / 2; i += 0.001){
+          x = (sin(i)*r)+650;
+          y = (cos(i)*r)+500;
+          tree.push_back({x,y,0,1});
+          }*/
+
+        /*float x0 = 650;
+        float y0 = 500;
+        float x = 0.0;
+        float y = r;
+        float p = (5/4) - r;
+        while(x<y){
+            x++;
+            if(p<0)
+                p+=2*x+1; 
+            else{
+                y--;
+                p+=2*(x-y)+1;
+            }
+            tree.push_back({x0+x,y0+y,0,1});
+            tree.push_back({x0+y,y0+x,0,1});       
+            //tree.push_back({x0-y,y0+x,0,1});     
+            //tree.push_back({x0-x,y0+y,0,1});
+            //tree.push_back({x0-x,y0-y,0,1});
+            //tree.push_back({x0-y,y0-x,0,1});
+            tree.push_back({x0+y,y0-x,0,1});
+            tree.push_back({x0+x,y0-y,0,1});
+        }*/
+
+        tree.push_back({725,450,0,1});
+        tree.push_back({200,400,0,1});
+
+
+    }
+
+    int vertmin = 0;
+    for(int i = 0; i < tree.size(); i++){
+        apts[vertmin] = tree[i].x;
+        apts[vertmin+1] = tree[i].y;
+        apts[vertmin+2] = tree[i].z;
+        apts[vertmin+3] = tree[i].w;
+        vertmin+=4;
+    }
+}
+void toVertex ( float *apts, struct vertex *vp, int pts ){
+    int i;
+
+    for (i=0;i<pts;i++)
+    {
+        (vp+i)->x = *(apts+(i*4)+0);
+        (vp+i)->y = *(apts+(i*4)+1);
+        (vp+i)->z = *(apts+(i*4)+2);
+        (vp+i)->w = *(apts+(i+4)+3);
+    }
+}
+
+
+void drawTree( vertex *vp, int points ){
+    /*vertex bounds[4];
+      vertex *temp = &bounds[0];
+      bounds[0] = {100,100,0,1};
+      bounds[1] = {100,900,0,1};
+      bounds[2] = {900,900,0,1};
+      bounds[3] = {900,100,0,1}; 
+      vertex outVertexArray[points];
+      vertex *point = &outVertexArray[0];
+      int *outLength; 
+     *outLength = points*2;
+     SutherlandHodgmanPolygonClip(vp,outVertexArray,points,outLength,bounds);
+     */
+    glBegin(GL_LINE_LOOP);
+    for (int i=0;i<points;i++)
+      glVertex2f( (vp+i)->x, (vp+i)->y );
+    
+    /*
+    glVertex2f((vp+0)->x,(vp+0)->y);
+    glVertex2f((vp+1)->x,(vp+1)->y);
+    for(int i = 2; i < points-4;i++){
+        glVertex2f((vp+i)->x,(vp+i)->y);
+    }
+    glVertex2f((vp+points-2)->x,(vp+points-2)->y);
+    glVertex2f((vp+points-1)->x,(vp+points-1)->y);
+    */
+    
+    glEnd();
+}
+
+void fillTree(){
+    //tesselation goes here
+    //glBegin(GL_POLYGON);
+    //for(int i = 0; i < tree.size(); i++)
+    //    glVertex2f(tree[i].x, tree[i].y);
+    //glEnd();
+}                               
