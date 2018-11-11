@@ -17,7 +17,7 @@ int checkintersection(float* vp, int points){
     // Returns 1 if no intersection, 0 if there is an intersection
 
     int value = 0;
-    for(int i = 0; i < points; i++){
+    for(int i = 0; i < points; i+=4){
         float x1 = *((vp+i)+0), y1 = *((vp+i)+1), x2 = *((vp+i+1)+0), y2 = *((vp+i+1)+1),
                x3 = *((vp+i+2)+0), y3 = *((vp+i+2)+1), x4 = *((vp+i+3)+0), y4 = *((vp+i+3)+1);
         float denom = (((x2 - x1)* -1*(y4-y3) - -1*(x4-x3)*(y2-y1)));
@@ -38,7 +38,6 @@ int checkintersection(float* vp, int points){
                     triangle t = {{ *((vp+i)+0), *((vp+i)+1)}, { *((vp+i+1)+0), *((vp+i+1)+1)}, { *((vp+i+2)+0), *((vp+i+2)+1)}};
                     triangles.push_back(t);
                 }
-
             }
         }
         else    // denom = 0, so intersection does not occur.
@@ -46,8 +45,8 @@ int checkintersection(float* vp, int points){
     }
     return value;
     
-    /*
-    glColor3f(1.0, 0.0, 0.0);
+    
+    /*glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_TRIANGLE_FAN);
         for(int i = 0; i < points; i++){
             glVertex2f((*(vp+i*4)+0), (*(vp+i*4)+1));

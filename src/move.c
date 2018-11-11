@@ -1,5 +1,8 @@
 #include "mouse.c"
 
+// These methods control the arrow-key moving
+// of the polygon
+
 void moveup(){
     movey += 5;
 }

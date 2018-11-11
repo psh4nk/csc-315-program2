@@ -29,11 +29,6 @@ typedef struct{
     double a[2], b[2], c[2];
 } triangle;
 
-/*typedef struct{
-// struct to hold vertices
-int x, y;
-} coords;
-*/
 int count = 0;
 std::vector<vertex> tree;
 std::vector<triangle> triangles;
@@ -51,3 +46,5 @@ float movex = 0.0, movey = 0.0, movez = 0.0;
 //flag to handle reflection
 int reflectflag = 0;
 
+//flag to handle tessellation
+int tessflag = 0;

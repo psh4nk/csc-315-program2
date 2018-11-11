@@ -15,18 +15,31 @@ void keyboard( unsigned char key, int x, int y ){
         else
             reflectflag = 0;
     }
+    
+    // polygon spin control
     if(key == '+')
         DELTA_SPIN -= 100;
     if(key == '-')
         DELTA_SPIN += 100;
+
+    //tesselation control
     if(key == 'f' || key == 'F')
-        fillTree();
+        if(tessflag == 0)
+            tessflag = 1;
+        else 
+            tessflag = 0;
+    if(key == 't' || key == 'T'){ 
+        tessellate();
+        if(tessflag == 0)
+            tessflag = 1;
+        else 
+            tessflag = 0;
+    }
+    
+    // animation control
     if(key == 's' || key == 'S') 
         stopAnimation();
     if(key == 'i' || key == 'I')
-        stopAndReset();
-    //if(key == 't' || key == 'T'){ 
-        //tessellate();
-    //}
+        stopAndReset();  
 }
 

@@ -1,7 +1,12 @@
 #include "globals.c"
 
+/*
+ * Defines the matrices necessary for
+ * all transformation routines
+ */
+
 void buildReflectX(float x, float y, float z, float *pA){
-    //defines the xy-axis reflection matrix
+    //defines the reflection matrix
     pA[ 0] = -1.0; pA[ 1] = 0.0; pA[ 2] = 0.0; pA[ 3] =   x+movex;
     pA[ 4] = 0.0; pA[ 5] = -1.0; pA[ 6] = 0.0; pA[ 7] =   y+movey;
     pA[ 8] = 0.0; pA[ 9] = 0.0; pA[10] = -1.0; pA[11] =   z+movez;

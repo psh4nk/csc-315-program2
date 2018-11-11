@@ -17,7 +17,7 @@ void tessellate(){
                     (triangles[i].a[0]*triangles[i].c[1]) - (triangles[i].b[0]*triangles[i].a[1]) - (triangles[i].c[0]*triangles[i].b[1])));
         std::cout<<"T" << i+1 << " area = " << area << '\n';
     }    
-
+    std::cout<<"LKJSDFLKJSDFL:JKSDLJKSDFJKL\n";
     glEnd();
     //glFlush();
 

@@ -1,6 +1,9 @@
 #include "keyboard.c"
 
 void SpecialInput(int key, int x, int y){
+    // Allows for input of the arrow keys,
+    // which control the movement of the polygon
+    
     switch(key){
         case GLUT_KEY_UP:
             moveup();
