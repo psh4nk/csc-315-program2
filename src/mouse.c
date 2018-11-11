@@ -21,6 +21,8 @@ void stopAndReset(){
     scalex = 1.0, scaley = 1.0, scalez = 1.0;
     movex = 0.0, movey = 0.0, movez = 0.0;
     reflectflag = 0;
+    tessflag = 0;
+    fillflag = 0;
 }
 
 

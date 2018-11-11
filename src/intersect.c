@@ -12,14 +12,14 @@ int isccw(float x1, float y1, float x2, float y2, float x3, float y3){
     return value;
 }
 
-int checkintersection(float* vp, int points){
+int checkintersection(vertex *vp, int points){
     // Check if the new vertex can make a line that intersects with any of the preceding vertices.
     // Returns 1 if no intersection, 0 if there is an intersection
 
     int value = 0;
-    for(int i = 0; i < points; i+=4){
-        float x1 = *((vp+i)+0), y1 = *((vp+i)+1), x2 = *((vp+i+1)+0), y2 = *((vp+i+1)+1),
-               x3 = *((vp+i+2)+0), y3 = *((vp+i+2)+1), x4 = *((vp+i+3)+0), y4 = *((vp+i+3)+1);
+    for(int i = 0; i < points; i+=3){
+        float x1 = (vp+i)->x, y1 = (vp+i)->y, x2 = (vp+i+1)->x, y2 = (vp+i+1)->y,
+               x3 = (vp+i+2)->x, y3 = (vp+i+2)->y, x4 = (vp+i+3)->y, y4 = (vp+i+3)->y;
         float denom = (((x2 - x1)* -1*(y4-y3) - -1*(x4-x3)*(y2-y1)));
         float ua, ub;
 
@@ -32,26 +32,18 @@ int checkintersection(float* vp, int points){
             }
             else{
                 value = 1;
-                if(isccw(*((vp+i)+0), *((vp+i)+1), *((vp+i+1)+0), *((vp+i+1)+1), *((vp+i+2)+0), *((vp+i+2)+1)) == 1){
+                if(isccw(((vp+i)->x), (vp+i)->y, (vp+i+1)->x, (vp+i+1)->y, (vp+i+2)->x, (vp+i+2)->y) == 1){
                     // check if vertices are ccw while checking if they intersect
                     // if ccw and no intersection, the vertices are added to the triangle list
-                    triangle t = {{ *((vp+i)+0), *((vp+i)+1)}, { *((vp+i+1)+0), *((vp+i+1)+1)}, { *((vp+i+2)+0), *((vp+i+2)+1)}};
+                    triangle t = {{ (vp+i)->x, (vp+i)->y}, { (vp+i+1)->x, (vp+i+1)->y}, { (vp+i+2)->x, (vp+i+2)->y}};
                     triangles.push_back(t);
                 }
             }
         }
         else    // denom = 0, so intersection does not occur.
             value = 1;
+
     }
-    return value;
-    
-    
-    /*glColor3f(1.0, 0.0, 0.0);
-    glBegin(GL_TRIANGLE_FAN);
-        for(int i = 0; i < points; i++){
-            glVertex2f((*(vp+i*4)+0), (*(vp+i*4)+1));
-        }
-    glEnd();
-    */
+    return value; 
 }
 

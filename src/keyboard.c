@@ -24,16 +24,26 @@ void keyboard( unsigned char key, int x, int y ){
 
     //tesselation control
     if(key == 'f' || key == 'F')
-        if(tessflag == 0)
-            tessflag = 1;
-        else 
-            tessflag = 0;
+        //tessellate();
+        if(fillflag == 0){
+            fillflag = 1;
+            //tessflag = 1;
+        }
+        else{
+            fillflag = 0;
+        }
     if(key == 't' || key == 'T'){ 
-        tessellate();
+        //tessellate();
         if(tessflag == 0)
             tessflag = 1;
-        else 
+        else {
             tessflag = 0;
+            //fillflag = 0;
+        }
+    }
+    if(key == 'l' || key == 'L'){
+        fillflag = 0;
+        tessflag = 0;
     }
     
     // animation control

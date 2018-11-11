@@ -48,3 +48,6 @@ int reflectflag = 0;
 
 //flag to handle tessellation
 int tessflag = 0;
+
+//flag to handle triangle filling
+int fillflag = 0;

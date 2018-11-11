@@ -15,11 +15,41 @@ void defineTree( float *apts ){
         count++;
         tree.push_back({200,400,0,1});
         tree.push_back({725,450,0,1});
+        
+        // angular method of drawing circle
         for (float i = TPI/2; i >=0; i -= 0.001){
-            x = (sin(i)*r)+650;
-            y = (cos(i)*r)+500;
-            tree.push_back({x,y,0,1});
-        }
+          x = (sin(i)*r)+650;
+          y = (cos(i)*r)+500;
+          tree.push_back({x,y,0,1});
+          }
+
+        /*                                   *\
+         * Midpoint method of drawing circle *
+
+        float radius = 200;
+        float x, y;
+        float x0 = 650, y0 = 550;
+        float d;
+        y = 0;
+        x = radius;
+        d = 5.0 / 4.0 - radius;
+        while (y<x) {
+            if ( d > 0 ) {
+                d -= (x-y) * 2.0 + 5;
+                y++;
+                x--;
+            }
+            else {
+                d += (x)*2.0+3;
+                y++;
+            }
+            tree.push_back({x0+x,y0+y,0,1}); 
+            tree.push_back({x0-y,y0-x,0,1});
+            tree.push_back({x0-y,y0-y,0,1});
+            tree.push_back({x0+x,y0+x,0,1});
+        } */           
+
+
         tree.push_back({725,550,0,1});
         tree.push_back({200,600,0,1});
     }
@@ -37,7 +67,7 @@ void defineTree( float *apts ){
 void toVertex ( float *apts, struct vertex *vp, int pts ){    
     //convert the c array containing the tree 
     //coordinates to a vertex array
-    
+
     for (int i=0;i<pts;i++)
     {
         (vp+i)->x = *(apts+(i*4)+0);
@@ -63,13 +93,13 @@ void drawTree( vertex *vp, int points ){
     bottom[0] = {100,100,0,1};
     bottom[1] = {900,100,0,1};
 
-   
+
     // define some variables used for the clipping routine
     int j;
     int* outLength;
     outLength = &j;
     vertex *temp=vp;
-    
+
     //for every point in the clipped tree,
     //check if any point goes outside the 
     //defined boundaries
@@ -92,15 +122,29 @@ void drawTree( vertex *vp, int points ){
     glEnd();
 }
 
-void fillTree(float *apts, int points){
+void fillTree(vertex *vp, int points){
     //tesselation goes here
-    checkintersection(apts,points);
-    glBegin(GL_TRIANGLE_FAN);
-    std::cout<<"filling\n";
-    for(int i = 0; i < triangles.size(); i+=3){
-        glVertex2f(triangles[i].a[0], triangles[i].a[1]);
-        glVertex2f(triangles[i+1].a[0], triangles[i+1].a[1]);
-        glVertex2f(triangles[i+2].a[0], triangles[i+2].a[1]);
+    std::vector<triangle> temp;
+    checkintersection(vp,points);
+    if(tessflag == 1 && fillflag == 0){
+        glBegin(GL_LINE_LOOP);
+        for(int i = 0; i < triangles.size(); i+=3){
+            glVertex2f(triangles[i].a[0], triangles[i].a[1]);
+            glVertex2f(triangles[i+1].a[0], triangles[i+1].a[1]);
+            glVertex2f(triangles[i+2].a[0], triangles[i+2].a[1]);
+        }
+        glEnd();
+        glFlush();
     }
-    glEnd();
+    else if(fillflag == 1){
+        glBegin(GL_POLYGON);
+        for(int i = 0; i < triangles.size(); i+=3){
+            glVertex2f(triangles[i].a[0], triangles[i].a[1]);
+            glVertex2f(triangles[i+1].a[0], triangles[i+1].a[1]);
+            glVertex2f(triangles[i+2].a[0], triangles[i+2].a[1]);
+        }
+        glEnd();
+        glFlush();
+    } 
+    triangles = temp;
 }                               

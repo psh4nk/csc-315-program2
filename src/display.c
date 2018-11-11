@@ -32,7 +32,7 @@ void display( void ){
     /* Draw Scaled and Rotated Arrow */
     drawTree( invp, inPoints );
     if(tessflag == 1){
-        fillTree(apts, inPoints);    
+        fillTree(invp, inPoints);    
     }
     glutSwapBuffers();
 }
