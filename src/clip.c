@@ -55,7 +55,6 @@ bool Inside(vertex testVertex, vertex *clipBoundary){
 
 void Output(vertex newVertex, int *outLength, vertex *outVertexArray){
     (*outLength)++;
-    //std::cout << "outLength: " << *outLength << std::endl;
     outVertexArray[*outLength-1].x = newVertex.x;
     outVertexArray[*outLength-1].y = newVertex.y;
 }

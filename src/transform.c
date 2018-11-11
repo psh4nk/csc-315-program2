@@ -1,5 +1,6 @@
 #include "matrices.c"
 #include "constants.h"
+// Written by Dr. Pounds
 
 void vmatm (int SIZE, float *pA, float *pB){
     // Matrix-vector multiplication

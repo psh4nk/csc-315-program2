@@ -1,5 +1,6 @@
 #include "clip.c"
 #include "includes.h"
+// Some portions of this code were written by Dr. Pounds
 
 void PipeLine( float *vp, int vpts ){
     /*  This routine will run the graphics transformation pipeline. 

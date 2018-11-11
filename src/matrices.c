@@ -1,5 +1,5 @@
 #include "globals.c"
-
+// Some portions of this code were written by Dr. Pounds
 /*
  * Defines the matrices necessary for
  * all transformation routines
